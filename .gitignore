@@ -1,0 +1,2 @@
+# Planning docs are local-only per project config (commit_docs: false)
+.planning/
