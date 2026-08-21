@@ -1,0 +1,79 @@
+---
+import { getEntry } from "astro:content";
+
+const contact = await getEntry("contact", "contact");
+if (!contact) throw new Error("Contact content missing");
+const { email, github, name } = contact.data;
+const brandInitial = (name ?? "A")[0];
+const year = new Date().getFullYear();
+const displayName = name ?? "Home";
+const githubLabel = github.replace(/^https?:\/\//, "");
+---
+
+<footer class="footer" id="contact">
+  <div class="container">
+    <div class="cta-block">
+      <p class="eyebrow">Get in touch</p>
+      <h2 class="display-lg">Let's build something great.</h2>
+      <p>I'm open to full-time roles and freelance projects, especially work that needs a calm, type-safe product layer.</p>
+      <div class="cta-actions">
+        <a class="btn--inverse" href={`mailto:${email}`}>Email me</a>
+        <a class="footer-link-dark" href={github} target="_blank" rel="noopener">GitHub <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="footer-main">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="/" aria-label={`${displayName} — home`}>
+            <span class="brand-mark">{brandInitial}</span>
+            <span class="brand-name">{displayName}</span>
+          </a>
+          <p>Product engineer building fast, accessible web products — one boring stack at a time.</p>
+          <div class="footer-brand-socials">
+            <a href={`mailto:${email}`}>Email</a>
+            <a href={github} target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+
+        <nav class="footer-col" aria-label="Sitemap">
+          <span class="eyebrow">Sitemap</span>
+          <ul>
+            <li><a href="/">Me</a></li>
+            <li><a href="/projects/">Projects</a></li>
+            <li><a href="/skills/">Skills</a></li>
+            <li><a href="/contact/">Contact</a></li>
+          </ul>
+        </nav>
+
+        <div class="footer-col">
+          <span class="eyebrow">Contact</span>
+          <ul>
+            <li><a href={`mailto:${email}`}>{email}</a></li>
+            <li><a href={github} target="_blank" rel="noopener">{githubLabel}</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <span class="eyebrow">Currently</span>
+          <ul>
+            <li class="now-item"><span class="lbl">Where</span><span>Europe · UTC+2</span></li>
+            <li class="now-item"><span class="lbl">Open to</span><span>Full-time · freelance</span></li>
+            <li class="now-item"><span class="lbl">Status</span><span>Free from June</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-base">
+      <span>© {year} {displayName}. All rights reserved.</span>
+      <span class="mono">styled with DESIGN.md tokens · v0.1</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-brand .brand-name {
+    color: var(--on-ink);
+  }
+</style>
