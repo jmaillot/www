@@ -8,8 +8,9 @@
     "npm": ">=10.9.8"
   },
   "scripts": {
-    "check": "astro check",
-    "build": "astro build",
+    "check": "astro check && npm run check:tokens",
+    "check:tokens": "node scripts/check-design-tokens.mjs",
+    "build": "npm run check:tokens && astro build",
     "preview": "astro preview"
   },
   "dependencies": {
