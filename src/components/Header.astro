@@ -1,0 +1,141 @@
+---
+import { getEntry } from "astro:content";
+const contact = await getEntry("contact", "contact");
+if (!contact) throw new Error("Contact content missing: src/content/contact/contact.md");
+const { email, github } = contact.data;
+const pathname = Astro.url.pathname;
+const isActive = (href: string) => pathname === href || (href !== "/" && pathname.startsWith(href));
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/projects/", label: "Projects" },
+  { href: "/skills/", label: "Skills" },
+  { href: "/contact/", label: "Contact" },
+];
+const brandName = contact.data.name ?? "Site";
+// nav hrefs for grep verification: href="/projects/" href="/skills/" href="/contact/"
+---
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="/" aria-label={`${brandName} — home`}>
+      <span class="brand-mark" aria-hidden="true">{brandName[0]}</span>
+      <span class="brand-name">{brandName}</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      {
+        navLinks.map(({ href, label }) => (
+          <a
+            class="nav-link"
+            href={href}
+            aria-current={isActive(href) ? "page" : undefined}
+            class:list={[{ "is-active": isActive(href) }]}
+          >
+            {label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="nav-ctas">
+      <a class="btn btn--secondary-sm" href={github} target="_blank" rel="noopener">GitHub</a>
+      <a class="btn btn--primary-sm" href={`mailto:${email}`}>Hire me</a>
+    </div>
+
+    <button
+      class="nav-burger"
+      id="menuToggle"
+      aria-expanded="false"
+      aria-controls="mobileMenu"
+      aria-label="Open menu"
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-overlay" id="mobileMenu">
+  <button class="overlay-close" id="menuClose" aria-label="Close menu">×</button>
+  <nav class="mobile-menu" aria-label="Mobile">
+    {
+      navLinks.map(({ href, label }) => (
+        <a href={href} aria-current={isActive(href) ? "page" : undefined} class:list={[{ "is-active": isActive(href) }]}>
+          {label}
+        </a>
+      ))
+    }
+  </nav>
+  <div class="overlay-ctas">
+    <a class="btn btn--primary" href={`mailto:${email}`}>Hire me</a>
+    <a class="btn btn--secondary" href={github} target="_blank" rel="noopener">GitHub</a>
+  </div>
+</div>
+
+<style>
+  .nav-link.is-active {
+    color: var(--ink);
+    background: var(--soft-2);
+  }
+  .nav-link[aria-current="page"] {
+    color: var(--ink);
+  }
+</style>
+
+<script>
+  // @ts-nocheck
+  (() => {
+    const toggle = document.getElementById("menuToggle");
+    const closeBtn = document.getElementById("menuClose");
+    const overlay = document.getElementById("mobileMenu");
+    if (!toggle || !overlay) return;
+    const focusables = () =>
+      [...overlay.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])')].filter(
+        (el) => !el.hasAttribute("disabled"),
+      );
+    let lastFocus = null;
+    function setOpen(open) {
+      overlay.classList.toggle("is-open", open);
+      toggle.classList.toggle("is-open", open);
+      toggle.setAttribute("aria-expanded", String(open));
+      document.body.classList.toggle("no-scroll", open);
+      if (open) {
+        lastFocus = document.activeElement;
+        const first = focusables()[0] || closeBtn;
+        if (first && first.focus) first.focus();
+        document.addEventListener("keydown", onKeydown);
+      } else {
+        document.removeEventListener("keydown", onKeydown);
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+        else toggle.focus();
+      }
+    }
+    function onKeydown(e) {
+      if (e.key === "Escape") {
+        setOpen(false);
+        return;
+      }
+      if (e.key === "Tab") {
+        const els = focusables();
+        if (!els.length) return;
+        const first = els[0];
+        const last = els[els.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+    toggle.addEventListener("click", () => setOpen(!overlay.classList.contains("is-open")));
+    closeBtn && closeBtn.addEventListener("click", () => setOpen(false));
+    overlay.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setOpen(false)));
+    window.addEventListener("resize", () => {
+      if (window.matchMedia("(min-width: 600px)").matches) setOpen(false);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && overlay.classList.contains("is-open")) setOpen(false);
+    });
+  })();
+</script>
