@@ -10,6 +10,13 @@
     <title>Jeremy Maillot — Scaffold</title>
     <meta name="description" content="Scaffold placeholder for jmaillot.github.io — Astro static foundation." />
     <meta name="theme-color" content="#fafafa" />
+    <style>
+      :root {
+        /* Wired to astro.config.mjs fonts cssVariable bindings */
+        font-family: var(--font-sans, Inter, system-ui, sans-serif);
+      }
+      code, pre { font-family: var(--font-mono, JetBrains Mono, ui-monospace, monospace); }
+    </style>
   </head>
   <body>
     <main>
