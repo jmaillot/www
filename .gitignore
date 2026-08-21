@@ -1,2 +1,9 @@
 # Planning docs are local-only per project config (commit_docs: false)
 .planning/
+
+# Astro build outputs
+dist/
+.astro/
+
+# Dependencies
+node_modules/
