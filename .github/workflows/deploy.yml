@@ -1,0 +1,45 @@
+# Deploy to GitHub Pages — D-01 (GH Pages Actions deploy), D-02 (official withastro/action)
+# Versions re-verified at implementation time 2026-08-23 from the official
+# withastro/action README: checkout v7 / withastro/action v6 / deploy-pages v5.
+# All refs pinned to full commit SHAs (T-5-02; mutable branch refs forbidden).
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+# Least privilege (T-5-01): clone + Pages deployment only
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Install, build, and upload your site output
+        uses: withastro/action@e84f40bd8d2caa9e768ec82ad30dd81f0b280853 # v6
+        with:
+          # Match .nvmrc / package.json engines (node >=22.12.0)
+          node-version: 22.12.0
+          # Default build command is `npm run build`, which chains BOTH gates:
+          # check:tokens (pre-build) -> astro build -> check:placeholders (post-build)
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5
