@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-label="Project screenshot placeholder">
+  <rect width="640" height="360" fill="#f5f5f5"/>
+  <g stroke="#e0e0e0" stroke-width="1">
+    <path d="M80 0V360M160 0V360M240 0V360M320 0V360M400 0V360M480 0V360M560 0V360"/>
+    <path d="M0 72H640M0 144H640M0 216H640M0 288H640"/>
+  </g>
+</svg>

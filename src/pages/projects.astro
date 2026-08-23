@@ -1,0 +1,45 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+
+const projects = (await getCollection("projects")).sort((a, b) => a.id.localeCompare(b.id));
+---
+
+<BaseLayout
+  title="Projects"
+  description="Selected projects — observability tooling, research readers, and payment reconciliation, built for reliability."
+>
+  <section class="section projects">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Projects</p>
+        <h1 class="display-lg">Selected work.</h1>
+        <p class="body-lg sub">Things I've built or led recently — each showing how I think about product, performance, and reliability.</p>
+      </div>
+      {
+        projects.length === 0 ? (
+          <p class="body-md">No projects published yet.</p>
+        ) : (
+          <div class="project-grid">
+            {projects.map((entry, i) => (
+              <ProjectCard
+                {...entry.data}
+                slug={entry.id.replace(/^\d+-/, "")}
+                index={i}
+                headingLevel="h2"
+              />
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* micro-hook: .section-head only margins h2 today; this page's head is the h1 */
+  .section-head :is(h1) {
+    margin-bottom: var(--space-sm);
+  }
+</style>
