@@ -1,0 +1,40 @@
+---
+interface Props {
+  title: string;
+  year: number;
+  summary: string;
+  stack: string[];
+  repoUrl: string;
+  demoUrl?: string;
+  image?: string;
+  slug: string; // filename stem minus numeric prefix, e.g. "orbit" — parent computes entry.id.replace(/^\d+-/, "")
+  index?: number; // position in grid; drives deterministic accent rotation
+  headingLevel?: "h2" | "h3"; // "h2" on /projects/ (cards sit under the page h1 — no skipped levels); "h3" under Home teaser h2 sections
+}
+const {
+  title, year, summary, stack, repoUrl, demoUrl, image,
+  slug, index = 0, headingLevel = "h3",
+} = Astro.props;
+const Heading = headingLevel;
+const accents = ["accent--develop", "accent--preview", "accent--ship"];
+const accent = accents[index % 3];
+---
+
+<article class="project-card reveal">
+  <div class="thumb">
+    {image && <img src={image} alt="" loading="lazy" width="640" height="360" />}
+    <span class="thumb-label"><span class={`thumb-accent ${accent}`} aria-hidden="true"></span>{`${slug} /`}</span>
+  </div>
+  <div class="card-body">
+    <div class="card-head">
+      <Heading class="display-sm">{title}</Heading>
+      <span class="card-tag">{year}</span>
+    </div>
+    <p class="body-sm">{summary}</p>
+    <p class="stack">{stack.map((t) => <span>{t}</span>)}</p>
+  </div>
+  <div class="link-row">
+    <a class="link-arrow" href={repoUrl} target="_blank" rel="noopener">View on GitHub <span class="arrow" aria-hidden="true">→</span></a>
+    {demoUrl && <a class="link-arrow" href={demoUrl} target="_blank" rel="noopener">Live demo <span class="arrow" aria-hidden="true">→</span></a>}
+  </div>
+</article>
