@@ -1,7 +1,7 @@
 ---
-email: "hello@example.com"
-github: "https://github.com/yourusername"
-name: "Ada Lovelace"
+email: "jeremymaillot@gmail.com"
+github: "https://github.com/jmaillot"
+name: "Jérémy Maillot"
 ---
 
-Contact for Ada Lovelace — single identity source for nav, hero, footer, 404.
+Contact for Jérémy Maillot — single identity source for nav, hero, footer, 404.

@@ -1,8 +1,8 @@
 ---
-name: "Ada Lovelace"
-role: "Product Engineer"
-pitch: "Product engineer building fast, accessible web platforms."
-availability: "Available for work · June 2026"
+name: "Jérémy Maillot"
+role: "IT Consultant"
+pitch: "Always available to share my knowledge and help."
+availability: "Available for questions"
 ---
 
-I'm Ada Lovelace, a product engineer focused on type-safe systems and humane interfaces — from design systems to edge APIs. Three years shipping on the modern web.
+I'm Jérémy Maillot, a passioned IT Consultant focused on automation — 19 years providing services in the same ESN from deploying hardware, to configuring complex systems.
