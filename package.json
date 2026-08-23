@@ -10,7 +10,8 @@
   "scripts": {
     "check": "astro check && npm run check:tokens",
     "check:tokens": "node scripts/check-design-tokens.mjs",
-    "build": "npm run check:tokens && astro build",
+    "check:placeholders": "node scripts/check-placeholders.mjs",
+    "build": "npm run check:tokens && astro build && npm run check:placeholders",
     "preview": "astro preview"
   },
   "dependencies": {
