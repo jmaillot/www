@@ -24,8 +24,8 @@ cfg.includes('--font-sans') && cfg.includes('--font-mono') ? ok('font CSS vars b
 existsSync('public/.nojekyll') && statSync('public/.nojekyll').size === 0 ? ok('public/.nojekyll empty') : fail('public/.nojekyll missing or not empty');
 existsSync('dist/.nojekyll') ? ok('dist/.nojekyll present') : fail('dist/.nojekyll missing (build did not copy public/)');
 
-// 4. Legacy untouched
-try { execSync('git diff --name-only | grep -q "index.html" && exit 1 || exit 0', {stdio:'pipe'}); ok('legacy index.html untouched'); } catch { fail('legacy index.html was modified'); }
+// 4. Legacy removed (Phase 5 D-04)
+!existsSync('index.html') ? ok('legacy index.html removed') : fail('legacy index.html still present');
 
 // 5. Built output static checks (only if dist exists)
 if (existsSync('dist/index.html')) {
