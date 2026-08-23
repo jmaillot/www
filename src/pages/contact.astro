@@ -1,0 +1,37 @@
+---
+import { getEntry } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const contact = await getEntry("contact", "contact");
+if (!contact) throw new Error("Contact content missing: src/content/contact/contact.md");
+const { email, github } = contact.data;
+
+const profileEntry = await getEntry("profile", "profile");
+if (!profileEntry) throw new Error("Profile content missing: src/content/profile/profile.md");
+const pitch = profileEntry.data.pitch;
+---
+
+<BaseLayout title="Contact" description="Get in touch with Jérémy Maillot — email or GitHub, one click away.">
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Get in touch</p>
+        <h1 class="display-lg">Let's talk.</h1>
+        <p class="body-lg sub">{pitch}</p>
+      </div>
+      <div class="cta-actions cta-row reveal">
+        <a class="btn btn--primary" href={`mailto:${email}`}>Email me</a>
+        <a class="btn btn--secondary" href={github} target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <p class="body-md contact-fallback">
+        Prefer copy-paste? <a href={`mailto:${email}`}>{email}</a> · <a href={github} target="_blank" rel="noopener">{github}</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* micro-hooks, token-based only */
+  .cta-row { justify-content: flex-start; margin-bottom: var(--space-md); }
+  .contact-fallback :is(a) { color: var(--link); text-decoration: underline; text-underline-offset: 3px; }
+</style>
