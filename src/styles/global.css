@@ -522,7 +522,7 @@ body.no-scroll { overflow: hidden; }
 }
 .skills-intro { position: sticky; top: 96px; }
 .skills-intro .eyebrow { margin-bottom: var(--space-xs); }
-.skills-intro h2 { margin-bottom: var(--space-sm); }
+.skills-intro :is(h1, h2) { margin-bottom: var(--space-sm); }
 .skills-intro .body-md { margin-top: var(--space-sm); }
 .skills-intro .mono-note {
   font-family: var(--font-mono);
@@ -549,6 +549,7 @@ body.no-scroll { overflow: hidden; }
 }
 .skill-card .eyebrow { color: var(--body); }
 .skill-card h3 { font-size: 16px; font-weight: 500; letter-spacing: -0.28px; }
+.skill-card-title { font-size: 16px; font-weight: 500; letter-spacing: -0.28px; }
 .skill-tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
 .skill-tags span {
   font-family: var(--font-mono);

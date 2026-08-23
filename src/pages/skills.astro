@@ -1,0 +1,38 @@
+---
+import { getEntry } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const skills = await getEntry("skills", "skills");
+if (!skills) throw new Error("Skills content missing: src/content/skills/skills.md");
+const categories = skills.data.categories;
+---
+
+<BaseLayout title="Skills" description="A pragmatic toolbelt — durable languages, frameworks, and practices used well.">
+  <section class="section skills">
+    <div class="container skills-grid">
+      <div class="skills-intro">
+        <p class="eyebrow">Skills</p>
+        <h1 class="display-lg">A pragmatic toolbelt.</h1>
+        <p class="body-md">{skills.body}</p>
+      </div>
+      {
+        categories.length === 0 ? (
+          <p class="body-md">Skill details coming soon.</p>
+        ) : (
+          <div class="skill-cards">
+            {categories.map((cat) => (
+              <div class="skill-card reveal">
+                <h2 class="skill-card-title">{cat.name}</h2>
+                <div class="skill-tags">
+                  {cat.tags.map((t) => (
+                    <span>{t}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
