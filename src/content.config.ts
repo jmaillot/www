@@ -8,6 +8,12 @@ const profile = defineCollection({
     role: z.string().min(1),
     pitch: z.string().min(1),
     availability: z.string().min(1),
+    headline: z.string().min(1),
+    terminal: z.object({
+      whoami: z.string().min(1),
+      stack: z.array(z.string().min(1)).min(1),
+      tagline: z.string().min(1),
+    }),
   }),
 });
 
