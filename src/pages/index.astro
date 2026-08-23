@@ -1,7 +1,113 @@
 ---
+import { getCollection, getEntry } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+
+const contact = await getEntry("contact", "contact");
+if (!contact) throw new Error("Contact content missing: src/content/contact/contact.md");
+const { email, github } = contact.data;
+
+const profileEntry = await getEntry("profile", "profile");
+if (!profileEntry) throw new Error("Profile content missing: src/content/profile/profile.md");
+const profile = profileEntry.data;
+
+const skillsEntry = await getEntry("skills", "skills");
+
+const projects = (await getCollection("projects")).sort((a, b) => a.id.localeCompare(b.id));
+const featured = projects.slice(0, 3); // D-07: first 3, capped at 3
+const categories = skillsEntry?.data.categories ?? [];
 ---
 
-<BaseLayout title="Home" description="Product engineer building fast, accessible web platforms.">
-  <section class="hero"><div class="container"><h1>Home</h1><p>Scaffold via BaseLayout — Phase 3 shell proof.</p></div></section>
+<BaseLayout title="Home" description="Jérémy Maillot, IT Consultant — automation and systems that stay simple.">
+  <section class="hero" id="me">
+    <div class="mesh" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <span class="hero-badge"><span class="hero-badge-dot" aria-hidden="true"></span>{profile.availability}</span>
+      <h1 class="display-xl">{profile.headline}</h1>
+      <p class="body-lg lead">I'm <strong>{profile.name}</strong>, {profile.role}. {profile.pitch}</p>
+      <div class="hero-ctas">
+        <a class="btn btn--primary" href={`mailto:${email}`}>Hire me</a>
+        <a class="btn btn--secondary" href="/projects/">View projects</a>
+      </div>
+      <div class="terminal" role="img" aria-label="Terminal mockup">
+        <div class="terminal-bar" aria-hidden="true">
+          <span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span>
+          <span class="terminal-bar-label">zsh — 80×24</span>
+        </div>
+        <div class="terminal-body">
+          <span class="c"># whoami</span><br />
+          <span class="p">$</span> {profile.terminal.whoami}<br />
+          <span class="c"># stack — quick overview</span><br />
+          <span class="p">$</span> <span class="s">{profile.terminal.stack.map((s) => `"${s}"`).join(", ")}</span><br />
+          <span class="c"># favorite commit message</span><br />
+          <span class="p">$</span> <span class="k">fix</span>: {profile.terminal.tagline}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {
+    featured.length > 0 && (
+      <section class="section projects" id="projects">
+        <div class="container">
+          <div class="section-head reveal">
+            <p class="eyebrow">01 · Projects</p>
+            <h2 class="display-lg">Selected work.</h2>
+            <p class="body-lg sub">A few things I've built or led recently.</p>
+          </div>
+          <div class="project-grid">
+            {featured.map((entry, i) => (
+              <ProjectCard {...entry.data} slug={entry.id.replace(/^\d+-/, "")} index={i} headingLevel="h3" />
+            ))}
+          </div>
+          <a class="link-arrow" href="/projects/">
+            View all projects <span class="arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    categories.length > 0 && (
+      <section class="section skills" id="skills">
+        <div class="container">
+          <div class="section-head reveal">
+            <p class="eyebrow">02 · Skills</p>
+            <h2 class="display-lg">A pragmatic toolbelt.</h2>
+          </div>
+          <div>
+            {categories.map((cat) => (
+              <a class="teaser-strip reveal" href="/skills/">
+                <span class="eyebrow">{cat.name}</span>
+                <span class="skill-tags">
+                  {cat.tags.map((t) => (
+                    <span>{t}</span>
+                  ))}
+                </span>
+              </a>
+            ))}
+          </div>
+          <a class="link-arrow" href="/skills/">
+            View all skills <span class="arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </section>
+    )
+  }
 </BaseLayout>
+
+<style>
+  /* micro-hook (Header.astro pattern): token-based only */
+  .teaser-strip {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--hairline);
+    text-decoration: none;
+  }
+  .teaser-strip .eyebrow { margin: 0; }
+  .teaser-strip:hover .eyebrow { text-decoration: underline; text-underline-offset: 3px; }
+</style>
