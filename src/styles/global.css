@@ -477,9 +477,10 @@ body.no-scroll { overflow: hidden; }
   gap: var(--space-xs);
 }
 .thumb-accent { width: 8px; height: 8px; border-radius: 50%; }
-.accent--develop { background: linear-gradient(135deg, var(--grad-develop-s), var(--grad-develop-e)); }
-.accent--preview { background: linear-gradient(135deg, var(--grad-preview-s), var(--grad-preview-e)); }
-.accent--ship    { background: linear-gradient(135deg, var(--grad-ship-s), var(--grad-ship-e)); }
+/* CR-01 fix: solid token fills — DESIGN.md Don't #4 forbids gradient below hero scale ("never miniaturised to a swatch"); each dot takes its pair's start stop */
+.accent--develop { background: var(--grad-develop-s); }
+.accent--preview { background: var(--grad-preview-s); }
+.accent--ship    { background: var(--grad-ship-s); }
 
 .thumb img {
   position: absolute;
