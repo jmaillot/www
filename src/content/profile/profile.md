@@ -1,13 +1,13 @@
 ---
 name: "Jérémy Maillot"
 role: "IT Consultant"
-pitch: "Independent IT consultant — Active Directory, Exchange Server, Microsoft 365 and Azure."
+pitch: "20+ years keeping business-critical Microsoft infrastructure running — Active Directory, Exchange, Microsoft 365, Azure."
 availability: "Available for consulting"
-headline: "Infrastructure that stays simple."
+headline: "Keep it running. Keep it simple."
 terminal:
   whoami: "jmaillot · IT Consultant · 20+ yrs in IT"
   stack: ["Active Directory", "Exchange Server", "Microsoft 365", "Azure"]
-  tagline: "patched · backed up · monitored"
+  tagline: "if it isn't monitored, it's already down"
 ---
 
 I'm Jérémy Maillot, an IT consultant with more than 20 years in IT — independent since 2017.
