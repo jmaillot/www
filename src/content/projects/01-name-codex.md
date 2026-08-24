@@ -5,7 +5,7 @@ summary: "Naming governance made visual for Microsoft 365 & Azure. Assemble reso
 stack: ["TypeScript", "React", "Vite", "JSON rule engine"]
 repoUrl: "https://github.com/jmaillot/name-codex"
 demoUrl: "https://name-codex.jeremymaillot.fr/"
-image: "/placeholder-16x9.svg"
+image: "/name-codex.png"
 ---
 
 Name Codex — define, explore and govern naming conventions for Azure, Entra ID, Exchange, Intune and Defender resources.
