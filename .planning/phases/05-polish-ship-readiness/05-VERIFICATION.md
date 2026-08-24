@@ -1,7 +1,7 @@
 ---
 phase: 05-polish-ship-readiness
 verified: 2026-08-24T08:20:00Z
-status: human_needed
+status: passed
 score: 14/15 must-haves verified
 overrides_applied: 0
 overrides: []
@@ -27,7 +27,7 @@ human_verification:
 
 **Phase Goal:** The rebuild is verifiably complete and shippable — the served output works under the configured host (custom domain https://www.jeremymaillot.fr, served from repo jmaillot/www via GH Pages; assets, `.nojekyll`, all internal links), placeholder identity is gate-blocked, and repo docs match the modular structure.
 **Verified:** 2026-08-24T08:20:00Z
-**Status:** human_needed
+**Status:** passed — human verification completed 2026-08-24 (4/4 items approved by developer; see 05-HUMAN-UAT.md)
 **Re-verification:** No — initial verification
 
 ## Methodology Note — Live Checks Required Direct IP Resolution
