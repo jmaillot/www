@@ -5,6 +5,7 @@ summary: "The site you're looking at. A five-route static Astro build with zero 
 stack: ["Astro", "TypeScript", "Markdown"]
 repoUrl: "https://github.com/jmaillot/www"
 demoUrl: "https://www.jeremymaillot.fr/"
+image: "/this-site.png"
 ---
 
 Personal website — hand-written design tokens, content-as-data, and build gates that make broken ships impossible.
