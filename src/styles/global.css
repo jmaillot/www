@@ -205,11 +205,14 @@ section[id] { scroll-margin-top: 80px; }
 
 /* Inverse pill for dark (ink) surfaces — white pill carries the conversion target. */
 .btn--inverse {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: var(--canvas);
   color: var(--ink);
   border-radius: var(--radius-pill);
-  height: 48px;
-  padding: 0 var(--space-2xl);
+  height: 44px;
+  padding: 0 var(--space-lg);
   font-size: 16px;
   font-weight: 500;
   transition: box-shadow .2s ease, transform .2s ease;
@@ -582,11 +585,13 @@ body.no-scroll { overflow: hidden; }
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
-  padding: var(--space-sm) var(--space-md);
+  padding: 0 var(--space-md);
+  height: 44px;
   border-radius: var(--radius-full);
   border: 1px solid rgb(255 255 255 / 16%); /* exception: one-off overlay alpha on dark, not a token */
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-xs);
   transition: border-color .2s ease, background-color .2s ease;
 }
@@ -649,7 +654,7 @@ body.no-scroll { overflow: hidden; }
   .project-grid { grid-template-columns: 1fr; }              /* 1-up mobile */
   .skill-cards { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; gap: var(--space-xl); }
-  .hero-ctas .btn, .cta-actions .btn--inverse { width: 100%; }   /* 44px touch floor via height + padding */
+  .hero-ctas .btn, .cta-actions .btn--inverse, .cta-actions .footer-link-dark { width: 100%; }   /* 44px touch floor via height + padding */
 }
 
 @media (prefers-reduced-motion: reduce) {
