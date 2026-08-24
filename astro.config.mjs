@@ -16,7 +16,7 @@ export default defineConfig({
     {
       provider: fontProviders.google(),
       name: 'Inter',
-      cssVariable: '--font-sans',
+      cssVariable: '--font-inter',
       weights: [400, 500, 600],
       styles: ['normal'],
       subsets: ['latin'],
@@ -24,7 +24,7 @@ export default defineConfig({
     {
       provider: fontProviders.google(),
       name: 'JetBrains Mono',
-      cssVariable: '--font-mono',
+      cssVariable: '--font-jetbrains-mono',
       weights: [400, 500],
       styles: ['normal'],
       subsets: ['latin'],

@@ -12,13 +12,13 @@ const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
 (/^\^6/.test(pkg.dependencies?.typescript ?? pkg.devDependencies?.typescript ?? '')) ? ok('typescript ^6') : fail('typescript not ^6');
 existsSync('.nvmrc') && readFileSync('.nvmrc','utf8').trim().match(/^v?22\.12/) ? ok('.nvmrc >=22.12') : fail('.nvmrc missing or wrong');
 
-// 2. astro.config host decisions
+// 2. astro.config host decisions (custom domain since Phase 5 deploy — repo jmaillot/www + CNAME)
 const cfg = readFileSync('astro.config.mjs','utf8');
-cfg.includes("https://jmaillot.github.io") ? ok('site set') : fail('site missing');
+cfg.includes("https://www.jeremymaillot.fr") ? ok('site set') : fail('site missing');
 /^\s*base:/m.test(cfg) ? fail('base must be unset') : ok('base unset');
 cfg.includes("output: 'static'") || cfg.includes('output: "static"') ? ok('output static') : fail('output not static');
-cfg.includes('GitHub Pages root') ? ok('host comment present') : fail('host comment missing');
-cfg.includes('--font-sans') && cfg.includes('--font-mono') ? ok('font CSS vars bound') : fail('font vars missing');
+cfg.includes('custom domain root') ? ok('host comment present') : fail('host comment missing');
+cfg.includes('--font-inter') && cfg.includes('--font-jetbrains-mono') ? ok('font CSS vars bound') : fail('font vars missing');
 
 // 3. .nojekyll
 existsSync('public/.nojekyll') && statSync('public/.nojekyll').size === 0 ? ok('public/.nojekyll empty') : fail('public/.nojekyll missing or not empty');

@@ -56,8 +56,11 @@
   --selection-fg: #f2f2f2;     /* colors.selection-fg */
 
   /* typography — preserved exactly to match astro.config.mjs cssVariable bindings */
-  --font-sans: "Inter", "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  /* Font stacks compose the Astro Fonts API self-hosted families (--font-inter /
+     --font-jetbrains-mono, emitted when <Font> renders in BaseLayout head).
+     Static names are the fallback for offline/no-JS-font builds. PERF-03. */
+  --font-sans: var(--font-inter, "Inter"), "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-jetbrains-mono, "JetBrains Mono"), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   /* rounded */
   --radius-none: 0px;
