@@ -528,6 +528,12 @@ body.no-scroll { overflow: hidden; }
   align-items: start;
 }
 .skills-intro { position: sticky; top: 96px; }
+.skills-intro .body-md a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.skills-intro .body-md a:hover { text-decoration-thickness: 2px; }
 .skills-intro .eyebrow { margin-bottom: var(--space-xs); }
 .skills-intro :is(h1, h2) { margin-bottom: var(--space-sm); }
 .skills-intro .body-md { margin-top: var(--space-sm); }

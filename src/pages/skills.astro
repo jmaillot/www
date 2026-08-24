@@ -1,19 +1,20 @@
 ---
-import { getEntry } from "astro:content";
+import { getEntry, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const skills = await getEntry("skills", "skills");
 if (!skills) throw new Error("Skills content missing: src/content/skills/skills.md");
 const categories = skills.data.categories;
+const { Content } = await render(skills);
 ---
 
-<BaseLayout title="Skills" description="A pragmatic toolbelt — durable languages, frameworks, and practices used well.">
+<BaseLayout title="Skills" description="Microsoft infrastructure consulting — Active Directory, Exchange Server, Microsoft 365, Azure.">
   <section class="section skills">
     <div class="container skills-grid">
       <div class="skills-intro">
         <p class="eyebrow">Skills</p>
         <h1 class="display-lg">A pragmatic toolbelt.</h1>
-        <p class="body-md">{skills.body}</p>
+        <div class="body-md"><Content /></div>
       </div>
       {
         categories.length === 0 ? (
