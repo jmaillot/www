@@ -1,14 +1,15 @@
 import { defineConfig, fontProviders } from 'astro/config';
 
-// Host decision: GitHub Pages root — https://jmaillot.github.io
+// Host decision: custom domain root — https://www.jeremymaillot.fr (repo: jmaillot/www)
 // - `site` is the canonical origin for sitemap/OG/canonical URLs.
-// - `base` is intentionally unset (root host `<user>.github.io` serves from `/`, not `/repo/`).
-//   If the repo were a project site (e.g. jmaillot.github.io/homepage) we would set base: '/homepage/'.
-//   base unset — root host serves from / (no base key present).
+// - Custom domains serve GitHub Pages from `/` regardless of repo name, so
+//   `base` stays unset and all root-absolute paths (`/_astro/*`, `/projects/`) work.
+//   If we ever served from the repo subpath instead, base would need to be set.
+// - public/CNAME pins the domain so it survives Actions-based deployments.
 // - `output: 'static'` enforces fully static HTML (no SSR/adapter) — aligns with PERF-04/DPLY-01.
 // - `public/.nojekyll` (empty file) prevents GH Pages Jekyll from dropping `_astro/` assets.
 export default defineConfig({
-  site: 'https://jmaillot.github.io',
+  site: 'https://www.jeremymaillot.fr',
   // base: not set — root host serves from /
   output: 'static',
   fonts: [
