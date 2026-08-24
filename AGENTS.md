@@ -53,7 +53,7 @@ node scripts/verify-foundation.mjs  # foundation invariants
 
 ## Deploy story
 
-Push to `master` → GitHub Actions workflow (`.github/workflows/deploy.yml`) builds with `npm run build` (so both gates run in CI) and deploys `dist/` to GitHub Pages via `withastro/action` + `actions/deploy-pages`. Live at https://jmaillot.github.io.
+Push to `master` → GitHub Actions workflow (`.github/workflows/deploy.yml`) builds with `npm run build` (so both gates run in CI) and deploys `dist/` to GitHub Pages via `withastro/action` + `actions/deploy-pages`. Live at https://www.jeremymaillot.fr.
 
 ## Known limitations
 

@@ -1,7 +1,7 @@
 # homepage — Jérémy Maillot
 
 Personal profile site for [Jérémy Maillot](https://github.com/jmaillot), live at
-https://jmaillot.github.io. A modular multi-page Astro static site (home, projects,
+https://www.jeremymaillot.fr. A modular multi-page Astro static site (home, projects,
 skills, contact, branded 404) with content authored in Markdown collections and
 styling driven by the design-token set in `DESIGN.md`.
 
@@ -32,6 +32,6 @@ One Markdown file per collection entry under `src/content/`:
 ## Deploy
 
 Push to `master` → GitHub Actions builds with `npm run build` and deploys `dist/`
-to GitHub Pages. Live at https://jmaillot.github.io.
+to GitHub Pages. Live at https://www.jeremymaillot.fr.
 
 Note: external project repo links (`https://github.com/jmaillot/<slug>`) may not exist yet — known limitation.
