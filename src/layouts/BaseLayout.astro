@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { Font } from "astro:assets";
+import { getEntry } from "astro:content";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
@@ -11,9 +12,13 @@ interface Props {
 }
 
 const { title, description, ogImage = "/og-default.png" } = Astro.props;
+// Identity single-source (REACH-03): title suffix reads the contact collection,
+// never a hardcoded name. Fallback only if the collection is missing.
+const contact = await getEntry("contact", "contact").catch(() => null);
+const ownerName = contact?.data?.name ?? "Jérémy Maillot";
 const site = Astro.site?.toString() ?? "https://www.jeremymaillot.fr";
 const url = new URL(Astro.url.pathname, site).toString();
-const fullTitle = `${title} — Jeremy Maillot`;
+const fullTitle = `${title} — ${ownerName}`;
 ---
 
 <!doctype html>
