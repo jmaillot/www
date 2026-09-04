@@ -1,5 +1,7 @@
-# Planning docs are local-only per project config (commit_docs: false)
+# Local-only — never push (agent guardrails + human-owned)
 .planning/
+DESIGN.md
+AGENTS.md
 
 # Astro build outputs
 dist/

@@ -28,7 +28,7 @@ if echo "$STAGED" | grep -qE '^\.planning/'; then
 fi
 
 DESIGN_AGENTS_BLOCKED=()
-for f in $STAGED_ALL; do
+for f in $STAGED; do
   if [[ "$f" == "DESIGN.md" || "$f" == "AGENTS.md" ]]; then
     DESIGN_AGENTS_BLOCKED+=("$f")
   fi
