@@ -2,7 +2,7 @@
 // DESIGN.md ↔ src/styles/global.css drift check — fail-closed (D-05)
 // Validates every DESIGN.md frontmatter token is mirrored in :root.
 // D-01 mute allowlist, D-06 theme-color #fafafa (canvas-soft), D-07 exception advisory.
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const DESIGN_PATH = resolve('DESIGN.md');
@@ -76,6 +76,16 @@ function parseRootVars(cssFile) {
 }
 
 function main() {
+  if (!existsSync(DESIGN_PATH)) {
+    console.log('○ DESIGN.md not found — skipping token drift check (local-only, see .gitignore)');
+    process.exitCode = 0;
+    return;
+  }
+  if (!existsSync(CSS_PATH)) {
+    console.error(`✗ drift: ${CSS_PATH} not found`);
+    process.exitCode = 1;
+    return;
+  }
   const { colors, spacing, rounded } = parseFrontmatter(DESIGN_PATH);
   const { vars, hexSet, rawCss } = parseRootVars(CSS_PATH);
 
