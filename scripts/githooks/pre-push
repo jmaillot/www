@@ -23,14 +23,14 @@ PUSHED_FILES=$(git diff --name-only "$RANGE" 2>/dev/null || git diff --name-only
 
 BLOCKED=()
 for f in $PUSHED_FILES; do
-  if [[ "$f" == .planning/* || "$f" == "DESIGN.md" || "$f" == "AGENTS.md" ]]; then
+  if [[ "$f" == .planning/* || "$f" == "DESIGN.md" || "$f" == "AGENTS.md" || "$f" == docs/* ]]; then
     BLOCKED+=("$f")
   fi
 done
 
 STAGED_AM=$(git diff --cached --name-only --diff-filter=AM 2>/dev/null || true)
 for f in $STAGED_AM; do
-  if [[ "$f" == .planning/* ]]; then
+  if [[ "$f" == .planning/* || "$f" == docs/* ]]; then
     BLOCKED+=("$f (staged)")
   fi
 done
@@ -40,7 +40,7 @@ if [[ ${#BLOCKED[@]} -gt 0 ]]; then
   echo "pre-push: BLOCKED — push would publish protected files:" >&2
   printf '  - %s\n' "${BLOCKED[@]}" >&2
   echo "" >&2
-  echo "Protected: .planning/ (local-only), DESIGN.md, AGENTS.md (human-owned)." >&2
+  echo "Protected: .planning/, docs/, DESIGN.md, AGENTS.md (local-only)." >&2
   echo "Agents must never push these; humans use GSD_ALLOW_PROTECTED_COMMIT=1 git push to override." >&2
   exit 1
 fi

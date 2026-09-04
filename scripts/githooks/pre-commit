@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # pre-commit — fail-closed guard for protected files
-# Blocks commits that stage .planning/, DESIGN.md, AGENTS.md unless human bypass is set.
+# Blocks commits that stage .planning/, DESIGN.md, AGENTS.md, docs/ unless human bypass is set.
 # Bypass for humans only: GSD_ALLOW_PROTECTED_COMMIT=1 git commit ...
 # Agents must NOT set this flag — see AGENTS.md "Agent Guardrails".
 set -euo pipefail
@@ -24,6 +24,23 @@ if echo "$STAGED" | grep -qE '^\.planning/'; then
   done <<< "$STAGED"
   if [[ ${#BLOCKED[@]} -gt 0 ]]; then
     REASON="protected .planning/ files staged (adds/modifies). .planning is local-only via .gitignore + commit_docs:false — use 'gsd_run query commit' which auto-skips it, never 'git add -f .planning'."
+  fi
+fi
+
+# docs/ — local-only
+if echo "$STAGED" | grep -qE '^docs/'; then
+  while IFS= read -r f; do
+    [[ -z "$f" ]] && continue
+    if [[ "$f" == docs/* ]]; then
+      BLOCKED+=("$f")
+    fi
+  done <<< "$STAGED"
+  if [[ ${#BLOCKED[@]} -gt 0 ]]; then
+    if [[ -z "$REASON" ]]; then
+      REASON="protected docs/ files staged. docs/ is local-only via .gitignore — never add."
+    else
+      REASON="$REASON Also blocked: docs/ is local-only."
+    fi
   fi
 fi
 

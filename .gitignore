@@ -2,6 +2,7 @@
 .planning/
 DESIGN.md
 AGENTS.md
+docs/
 
 # Astro build outputs
 dist/
