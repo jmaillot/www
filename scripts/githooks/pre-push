@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# pre-push — defense-in-depth guard for protected files
+set -euo pipefail
+
+if [[ "${GSD_ALLOW_PROTECTED_COMMIT:-}" == "1" ]]; then
+  exit 0
+fi
+
+while read -r local_ref local_sha remote_sha remote_ref; do :; done < /dev/stdin || true
+
+UPSTREAM=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || echo "")
+if [[ -n "$UPSTREAM" ]] && git rev-parse --verify "$UPSTREAM" >/dev/null 2>&1; then
+  RANGE="$UPSTREAM..HEAD"
+elif git rev-parse --verify origin/master >/dev/null 2>&1; then
+  RANGE="origin/master..HEAD"
+elif git rev-parse --verify origin/main >/dev/null 2>&1; then
+  RANGE="origin/main..HEAD"
+else
+  RANGE="HEAD~5..HEAD"
+fi
+
+PUSHED_FILES=$(git diff --name-only "$RANGE" 2>/dev/null || git diff --name-only HEAD~1 2>/dev/null || true)
+
+BLOCKED=()
+for f in $PUSHED_FILES; do
+  if [[ "$f" == .planning/* || "$f" == "DESIGN.md" || "$f" == "AGENTS.md" ]]; then
+    BLOCKED+=("$f")
+  fi
+done
+
+STAGED_AM=$(git diff --cached --name-only --diff-filter=AM 2>/dev/null || true)
+for f in $STAGED_AM; do
+  if [[ "$f" == .planning/* ]]; then
+    BLOCKED+=("$f (staged)")
+  fi
+done
+
+if [[ ${#BLOCKED[@]} -gt 0 ]]; then
+  mapfile -t BLOCKED < <(printf '%s\n' "${BLOCKED[@]}" | sort -u)
+  echo "pre-push: BLOCKED — push would publish protected files:" >&2
+  printf '  - %s\n' "${BLOCKED[@]}" >&2
+  echo "" >&2
+  echo "Protected: .planning/ (local-only), DESIGN.md, AGENTS.md (human-owned)." >&2
+  echo "Agents must never push these; humans use GSD_ALLOW_PROTECTED_COMMIT=1 git push to override." >&2
+  exit 1
+fi
+
+exit 0

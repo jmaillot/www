@@ -60,6 +60,22 @@ Push to `master` → GitHub Actions workflow (`.github/workflows/deploy.yml`) bu
 - External project `repoUrl`s (`https://github.com/jmaillot/<slug>`) point at repos that may not exist yet — accepted by design (externals are unverified; see phase decision D-10).
 - v2 deferred items (OG share card, sitemap, dark mode, real project screenshots, …) are tracked in `.planning/REQUIREMENTS.md`.
 
+## Agent Guardrails — Protected Files (Do Not Push)
+
+**Never stage, commit, or push these paths — even with `git add -f` or bypass flags. They are local-only or human-owned:**
+
+- `.planning/` (entire directory — already `.gitignored` and `commit_docs: false`; use `gsd_run query commit` which auto-skips it, never `git add -f .planning`)
+- `DESIGN.md` — token source of truth, human-owned
+- `AGENTS.md` — agent instructions, human-owned
+
+Rules for all GSD agents (executor, planner, doc-writer, verifier, etc.):
+1. Never `git add` any protected path. Before every commit, run `git status --short` and verify no protected path is staged.
+2. Never `git add .` / `git add -A` — stage files individually and verify allow-list.
+3. Never `git push` a commit that touches a protected path. If `git diff --cached --name-only` or `git diff --name-only HEAD~1 HEAD` includes any protected path, unstage it (`git restore --staged <path>`) and stop.
+4. Bypass flags `GSD_ALLOW_PROTECTED_COMMIT` / `GSD_ALLOW_PLANNING_SHRINK` are for human use only — agents must not set them.
+5. If a plan explicitly requires changing `DESIGN.md` or `AGENTS.md`, pause and request human verification via `checkpoint:human-verify` (`gate="blocking-human"`) instead of auto-committing.
+6. Violation is fail-closed: repository `pre-commit`/`pre-push` hooks block the commit/push and explain why.
+
 ## Verification
 
 How to check work: `npm run build` exits 0 and its output includes both gate pass messages — `All token checks passed.` and `All placeholder checks passed.` Any failure names the offending file/string and blocks the build.

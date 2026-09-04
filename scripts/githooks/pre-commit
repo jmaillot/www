@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# pre-commit — fail-closed guard for protected files
+# Blocks commits that stage .planning/, DESIGN.md, AGENTS.md unless human bypass is set.
+# Bypass for humans only: GSD_ALLOW_PROTECTED_COMMIT=1 git commit ...
+# Agents must NOT set this flag — see AGENTS.md "Agent Guardrails".
+set -euo pipefail
+
+if [[ "${GSD_ALLOW_PROTECTED_COMMIT:-}" == "1" ]]; then
+  exit 0
+fi
+
+STAGED=$(git diff --cached --name-only --diff-filter=AM 2>/dev/null || true)
+STAGED_ALL=$(git diff --cached --name-only 2>/dev/null || true)
+
+BLOCKED=()
+REASON=""
+
+if echo "$STAGED" | grep -qE '^\.planning/'; then
+  while IFS= read -r f; do
+    [[ -z "$f" ]] && continue
+    if [[ "$f" == .planning/* ]]; then
+      BLOCKED+=("$f")
+    fi
+  done <<< "$STAGED"
+  if [[ ${#BLOCKED[@]} -gt 0 ]]; then
+    REASON="protected .planning/ files staged (adds/modifies). .planning is local-only via .gitignore + commit_docs:false — use 'gsd_run query commit' which auto-skips it, never 'git add -f .planning'."
+  fi
+fi
+
+DESIGN_AGENTS_BLOCKED=()
+for f in $STAGED_ALL; do
+  if [[ "$f" == "DESIGN.md" || "$f" == "AGENTS.md" ]]; then
+    DESIGN_AGENTS_BLOCKED+=("$f")
+  fi
+done
+if [[ ${#DESIGN_AGENTS_BLOCKED[@]} -gt 0 ]]; then
+  BLOCKED+=("${DESIGN_AGENTS_BLOCKED[@]}")
+  if [[ -z "$REASON" ]]; then
+    REASON="protected DESIGN.md/AGENTS.md staged. These are human-owned — agents must request human verification via checkpoint:human-verify (gate=\"blocking-human\") instead of auto-committing."
+  else
+    REASON="$REASON Also blocked: DESIGN.md/AGENTS.md are human-owned."
+  fi
+fi
+
+if [[ ${#BLOCKED[@]} -gt 0 ]]; then
+  echo "pre-commit: BLOCKED — protected files staged:" >&2
+  printf '  - %s\n' "${BLOCKED[@]}" >&2
+  echo "" >&2
+  echo "Reason: $REASON" >&2
+  echo "" >&2
+  echo "Fix: git restore --staged <file> to unstage, or if this is an intentional human change:" >&2
+  echo "  GSD_ALLOW_PROTECTED_COMMIT=1 git commit -m \"...\"" >&2
+  echo "Agents are forbidden from using the bypass (see AGENTS.md)." >&2
+  exit 1
+fi
+
+exit 0
